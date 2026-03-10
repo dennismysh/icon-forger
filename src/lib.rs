@@ -13,7 +13,6 @@ pub mod import;
 pub mod shapes;
 
 use wasm_bindgen::prelude::*;
-use serde::{Deserialize, Serialize};
 
 use crate::export::Format;
 use crate::shapes::IconDef;

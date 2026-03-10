@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 description = "Parametric icon generator & SVG import pipeline → all platform formats"
 
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 

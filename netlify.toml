@@ -1,5 +1,5 @@
 [build]
-  command = "curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && bash build.sh"
+  command = "cargo install wasm-pack --locked && bash build.sh"
   publish = "web"
 
 [build.environment]
