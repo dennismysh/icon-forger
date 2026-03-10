@@ -1,5 +1,5 @@
 [build]
-  command = "cargo install wasm-pack --locked && bash build.sh"
+  command = "rustup default stable && cargo install wasm-pack --locked && bash build.sh"
   publish = "web"
 
 [build.environment]
