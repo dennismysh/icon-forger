@@ -1,5 +1,3 @@
 /target
 /web/pkg
-*.wasm
-Cargo.lock
 .DS_Store

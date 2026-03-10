@@ -6,7 +6,7 @@
 //! - ICNS (macOS)
 //! - WebP (Android / web)
 
-use image::{DynamicImage, ImageOutputFormat, RgbaImage};
+use image::{DynamicImage, ImageFormat, RgbaImage};
 use std::io::Cursor;
 use thiserror::Error;
 use tiny_skia::Pixmap;
@@ -61,7 +61,7 @@ fn resize_pixmap(pixmap: &Pixmap, target: u32) -> RgbaImage {
 pub fn to_png(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
     let img = pixmap_to_rgba(pixmap);
     let mut buf = Cursor::new(Vec::new());
-    img.write_to(&mut buf, ImageOutputFormat::Png)
+    img.write_to(&mut buf, ImageFormat::Png)
         .map_err(|e| ExportError::Encode(e.to_string()))?;
     Ok(buf.into_inner())
 }
@@ -70,7 +70,7 @@ pub fn to_png(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
 pub fn to_png_sized(pixmap: &Pixmap, size: u32) -> Result<Vec<u8>, ExportError> {
     let img = resize_pixmap(pixmap, size);
     let mut buf = Cursor::new(Vec::new());
-    img.write_to(&mut buf, ImageOutputFormat::Png)
+    img.write_to(&mut buf, ImageFormat::Png)
         .map_err(|e| ExportError::Encode(e.to_string()))?;
     Ok(buf.into_inner())
 }
@@ -81,7 +81,7 @@ pub fn to_png_sized(pixmap: &Pixmap, size: u32) -> Result<Vec<u8>, ExportError> 
 pub fn to_webp(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
     let img = pixmap_to_rgba(pixmap);
     let mut buf = Cursor::new(Vec::new());
-    img.write_to(&mut buf, ImageOutputFormat::WebP)
+    img.write_to(&mut buf, ImageFormat::WebP)
         .map_err(|e| ExportError::Encode(e.to_string()))?;
     Ok(buf.into_inner())
 }
@@ -90,7 +90,7 @@ pub fn to_webp(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
 pub fn to_webp_sized(pixmap: &Pixmap, size: u32) -> Result<Vec<u8>, ExportError> {
     let img = resize_pixmap(pixmap, size);
     let mut buf = Cursor::new(Vec::new());
-    img.write_to(&mut buf, ImageOutputFormat::WebP)
+    img.write_to(&mut buf, ImageFormat::WebP)
         .map_err(|e| ExportError::Encode(e.to_string()))?;
     Ok(buf.into_inner())
 }
@@ -121,16 +121,16 @@ pub fn to_ico(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
 
 // ── ICNS (macOS) ─────────────────────────────────────────────────
 
-/// Map pixel size → icns `OSType`.
-fn icns_ostype(size: u32) -> Result<icns::OSType, ExportError> {
+/// Map pixel size → icns `IconType`.
+fn icns_icon_type(size: u32) -> Result<icns::IconType, ExportError> {
     match size {
-        16 => Ok(icns::OSType::new(*b"icp4")),
-        32 => Ok(icns::OSType::new(*b"icp5")),
-        64 => Ok(icns::OSType::new(*b"icp6")),
-        128 => Ok(icns::OSType::new(*b"ic07")),
-        256 => Ok(icns::OSType::new(*b"ic08")),
-        512 => Ok(icns::OSType::new(*b"ic09")),
-        1024 => Ok(icns::OSType::new(*b"ic10")),
+        16 => Ok(icns::IconType::RGBA32_16x16),
+        32 => Ok(icns::IconType::RGBA32_32x32),
+        64 => Ok(icns::IconType::RGBA32_64x64),
+        128 => Ok(icns::IconType::RGBA32_128x128),
+        256 => Ok(icns::IconType::RGBA32_256x256),
+        512 => Ok(icns::IconType::RGBA32_512x512),
+        1024 => Ok(icns::IconType::RGBA32_512x512_2x),
         other => Err(ExportError::UnsupportedIcnsSize(other)),
     }
 }
@@ -150,9 +150,9 @@ pub fn to_icns(pixmap: &Pixmap) -> Result<Vec<u8>, ExportError> {
         )
         .map_err(|e| ExportError::Icns(e.to_string()))?;
 
-        let ostype = icns_ostype(size)?;
+        let icon_type = icns_icon_type(size)?;
         icon_family
-            .add_icon_with_type(&icns_img, ostype)
+            .add_icon_with_type(&icns_img, icon_type)
             .map_err(|e| ExportError::Icns(e.to_string()))?;
     }
 
