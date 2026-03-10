@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Icon Forger</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Icon Forger</h1>
+    <p class="tagline">Parametric icons &amp; SVG → all platform formats</p>
+  </header>
+
+  <main>
+    <!-- Mode tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-mode="codegen">Code-first</button>
+      <button class="tab" data-mode="import">SVG Import</button>
+    </nav>
+
+    <!-- Mode 1: Code-first -->
+    <section id="codegen" class="mode-panel active">
+      <div class="controls">
+        <div class="field">
+          <label for="bg-color">Background</label>
+          <input type="color" id="bg-color" value="#6366f1" />
+        </div>
+        <div class="field">
+          <label for="fg-color">Foreground</label>
+          <input type="color" id="fg-color" value="#ffffff" />
+        </div>
+        <div class="field">
+          <label for="shape-select">Shape</label>
+          <select id="shape-select">
+            <option value="circle">Circle</option>
+            <option value="rounded-rect">Rounded Rect</option>
+            <option value="polygon-3">Triangle</option>
+            <option value="polygon-5">Pentagon</option>
+            <option value="polygon-6">Hexagon</option>
+            <option value="ring">Ring</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="corner-radius">Corner Radius</label>
+          <input type="range" id="corner-radius" min="0" max="100" value="30" />
+        </div>
+        <div class="field">
+          <label for="render-size">Preview Size</label>
+          <select id="render-size">
+            <option value="128">128 px</option>
+            <option value="256" selected>256 px</option>
+            <option value="512">512 px</option>
+            <option value="1024">1024 px</option>
+          </select>
+        </div>
+      </div>
+      <button id="btn-render" class="primary">Render Preview</button>
+    </section>
+
+    <!-- Mode 2: SVG Import -->
+    <section id="import" class="mode-panel">
+      <div class="drop-zone" id="drop-zone">
+        <p>Drop an SVG file here or <label for="svg-file" class="link">browse</label></p>
+        <input type="file" id="svg-file" accept=".svg" hidden />
+      </div>
+      <div class="field">
+        <label for="import-size">Render Size</label>
+        <select id="import-size">
+          <option value="128">128 px</option>
+          <option value="256" selected>256 px</option>
+          <option value="512">512 px</option>
+          <option value="1024">1024 px</option>
+        </select>
+      </div>
+      <button id="btn-import" class="primary" disabled>Render SVG</button>
+    </section>
+
+    <!-- Preview -->
+    <section class="preview">
+      <h2>Preview</h2>
+      <div id="preview-area">
+        <p class="placeholder">Nothing rendered yet</p>
+      </div>
+    </section>
+
+    <!-- Export -->
+    <section class="export-bar">
+      <h2>Export</h2>
+      <div class="export-buttons">
+        <button class="export-btn" data-format="png" disabled>PNG</button>
+        <button class="export-btn" data-format="ico" disabled>ICO (Windows)</button>
+        <button class="export-btn" data-format="icns" disabled>ICNS (macOS)</button>
+        <button class="export-btn" data-format="webp" disabled>WebP (Android)</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built with Rust + WebAssembly</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
