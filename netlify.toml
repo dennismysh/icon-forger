@@ -1,0 +1,18 @@
+[build]
+  command = "curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && bash build.sh"
+  publish = "web"
+
+[build.environment]
+  CARGO_TERM_COLOR = "always"
+
+[[headers]]
+  for = "/*.wasm"
+  [headers.values]
+    Content-Type = "application/wasm"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
